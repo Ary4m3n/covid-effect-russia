@@ -1,14 +1,15 @@
 ---
-title: "My title"
-subtitle: "My subtitle if needed"
+title: "Why Did Russia Fare So Poorly during COVID: An Analysis of why one of the Best Prepared Countries could not control Excess Deaths"
 author: 
-  - First author
-  - Another author
-thanks: "Code and data are available at: LINK."
+  - Aryaman Sharma
+  - Aviral Bhardwaj
+  - Janel Gilani
+thanks: "Code and data are available at: https://github.com/Ary4m3n/covid-effect-russia.git; Replication on Social Science Reproduction platform available at: "
 date: today
 date-format: long
 abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
 format: pdf
+toc: true
 number-sections: true
 bibliography: references.bib
 ---
@@ -25,14 +26,19 @@ library(janitor)
 library(dplyr)
 library(rnaturalearth)
 library(sf)
+library(knitr)
 ```
 
 
 # Introduction
 
-You can and should cross-reference sections and sub-sections. We use @citeR and @rohan.
+The COVID-19 pandemic has led to an enormous loss of life over the world and has presented an unprecedented challenge to public health, foreign policy and has additionally had an adverse effect on countries' economies around the world, over the past 5 years [@citeWHOeffect]. There have been over 774 million reported confirmed cases of the virus being contract and the outbreak has caused over 7 million deaths, which are claimed to be "under counted" and "under reported", suggesting that the actual number is even higher around 18.2 - 33.5 million based on the excess mortality estimates [@citeWikiCOVID]. This excessively high number of deaths has alerted the world to assess how countries assumed to be well-prepared to tackle such outbreaks were affected to this extent.
 
-The remainder of this paper is structured as follows. @sec-data....
+There were a subset of countries, namely India, the United States of America, Brazil, Russia and Mexico which were impacted the most in terms of having the highest cumulative total deaths [@citeThinkGlobalHealth]. According to the global data, Russia's COVID-19 related deaths since the start of the pandemic have been over 230,000. Russia also holds the highest mortality rate in Europe and the second-highest rate in Asia [@citeCarnegieRussia]. For these reasons and more, Russia and its residents have suffered a lot over the past few years, wherein the adverse impact of the outbreak has lead to a plethora of impacts on the country's economy and standard of living. 
+
+This paper will follow a reproduction of Jennifer B. Nuzzo and Jorge R. Ledesma's paper [@citeRepPaper] and findings and apply a Russian-facing lens to discuss the impact of the COVID-19 outbreak on Russia and what could have been done better and can be improved for the future in order for the impact of any upcoming pandemics can be lessened. Our paper aims to replicate their claim of how well-prepared countries did so poorly during the COVID-19 outbreak, where the Nuzzo and Ledesma have concentrated solely on the United States but in this paper we look at Russia with the same regards and analyse the impact of the pandemic on the death toll, and finally provide for ways to improve the laws, regulations and plans to tackle such outbreaks in the future. Our reproduction found out that how ever well prepared Russia seemed to be, it experienced an unprecedented rise in the death rate compared to other countries, and its excess death rate was one of the highest amongst all countries. This leads us to make an important judgement that better planning and regulations can help reduce the impact of such outbreaks in the future, which will be studied in this paper.
+
+This paper is structured using the following sections: Data, Results and Discussion. In the Data (@sec-data) section, the data source of the datasets from the paper being replicated [@citeRepPaper] is discussed and the measurement and data cleaning process is outlined. In the Results (@sec-results) section, the paper summarizes the data findings and presents relevant maps and plots in order to study the trends. The paper ends with the Discussion (@sec-discussion) section, where the findings of the paper have been analysed and delved deeper into by studying the measures that can be taken to prevent the country from experiencing such an extensive effect of future pandemics. Additionally, the limitations and a further scope for the paper has been discussed here.
 
 ```{r}
 #| echo: false
@@ -239,7 +245,7 @@ We expect a positive relationship between the size of the wings and time spent a
 We can use maths by including latex between dollar signs, for instance $\theta$.
 
 
-# Results
+# Results {#sec-results}
 
 Our results are summarized in @tbl-modelresults.
 
@@ -274,7 +280,7 @@ modelsummary::modelsummary(
 
 
 
-# Discussion
+# Discussion {#sec-discussion}
 
 ## First discussion point {#sec-first-point}
 
