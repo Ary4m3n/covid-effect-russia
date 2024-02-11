@@ -20,6 +20,11 @@ bibliography: references.bib
 
 library(tidyverse)
 library(palmerpenguins)
+library(ggplot2)
+library(janitor)
+library(dplyr)
+library(rnaturalearth)
+library(sf)
 ```
 
 
@@ -29,7 +34,138 @@ You can and should cross-reference sections and sub-sections. We use @citeR and 
 
 The remainder of this paper is structured as follows. @sec-data....
 
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+cleaned_ghs_index_data_2021 <- read_csv("../data/analysis_data/cleaned_GHS_index.csv")
 
+world <- ne_countries(scale = "medium", returnclass = "sf")
+
+world_scores <- merge(world, cleaned_ghs_index_data_2021, by.x = "name", by.y = "country", all.x = TRUE)
+
+world_scores$score_factor <- cut(
+  world_scores$overall_score, 
+  breaks = c(16, 25, 30, 35, 40, 45, 50, 60, 70, 76), 
+  labels = c("16 to 25", "25 to 30", "30 to 35", "35 to 40", "40 to 45", "45 to 50", "50 to 60", "60 to 70", "70 to 76"), 
+  include.lowest = TRUE)
+
+ggplot(data = world_scores) +
+  geom_sf(aes(fill = score_factor), color = "white") +
+  scale_fill_manual(values = c("#990000", "#CC3333", "#FF6666", "#FF9966", "#FFCC99", "#99CCFF", "#6699CC", "#336699", "#003399")) +
+  labs(fill = "Global health security score", title = "Global Health Security Score (2021)") +
+  theme_minimal()
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+cleaned_deaths_data <- read_csv("../data/analysis_data/cleaned_all_cause_dth_rates.csv")
+
+cleaned_deaths_data_long <- pivot_longer(cleaned_deaths_data, cols = -country_name, names_to = "Year", values_to = "Value")
+
+cleaned_deaths_data_long[,-1] <- lapply(cleaned_deaths_data_long[,-1], as.numeric)
+
+cleaned_deaths_data_fit <- cleaned_deaths_data_long |>
+  filter(Year >= 2010 & Year <= 2019)
+
+ggplot(cleaned_deaths_data_long, aes(x = Year, y = Value, group = country_name, color = country_name)) +
+  geom_line(aes(color = country_name)) +
+  geom_point(aes(color = country_name)) +
+  geom_smooth(data = cleaned_deaths_data_fit, method = "lm", se = FALSE, aes(color = country_name), linetype = "dashed", size = 0.5) +
+  geom_smooth(data = cleaned_deaths_data_long, method = "lm", se = FALSE, aes(color = country_name), linetype = "dotted", size = 1) +
+  theme_minimal() +
+  scale_x_continuous(breaks = 2010:2021) +
+  labs(title = "Values Over Years by Country", x = "Year", y = "Value") +
+  theme(legend.title = element_blank())
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
+# Model: India
+model_india <- lm(Value ~ Year, data = cleaned_deaths_data_fit |> filter(country_name == "India"))
+# Predicting 2020 and 2021
+coefficients_ind <- coef(model_india)
+ind_2020 <- (coefficients_ind["Year"] * 2020) + coefficients_ind["(Intercept)"]
+ind_2021 <- (coefficients_ind["Year"] * 2021) + coefficients_ind["(Intercept)"]
+# Ratio
+ind <- cleaned_deaths_data_long |>
+  filter(country_name == "India")
+excess_ind_2020 <- ind$Value[11] - ind_2020
+excess_ind_2021 <- ind$Value[12] - ind_2021
+
+# Model: Russian Federation
+model_rus <- lm(Value ~ Year, data = cleaned_deaths_data_fit |> filter(country_name == "Russian Federation"))
+# Predicting 2020 and 2021
+coefficients_rus <- coef(model_rus)
+rus_2020 <- (coefficients_rus["Year"] * 2020) + coefficients_rus["(Intercept)"]
+rus_2021 <- (coefficients_rus["Year"] * 2021) + coefficients_rus["(Intercept)"]
+# Ratio
+rus <- cleaned_deaths_data_long |>
+  filter(country_name == "Russian Federation")
+excess_rus_2020 <- rus$Value[11] - rus_2020
+excess_rus_2021 <- rus$Value[12] - rus_2021
+
+# Model: United States
+model_us <- lm(Value ~ Year, data = cleaned_deaths_data_fit |> filter(country_name == "United States"))
+# Predicting 2020 and 2021
+coefficients_us <- coef(model_us)
+us_2020 <- (coefficients_us["Year"] * 2020) + coefficients_us["(Intercept)"]
+us_2021 <- (coefficients_us["Year"] * 2021) + coefficients_us["(Intercept)"]
+# Ratio
+us <- cleaned_deaths_data_long |>
+  filter(country_name == "United States")
+excess_us_2020 <- us$Value[11] - us_2020
+excess_us_2021 <- us$Value[12] - us_2021
+
+# Model: South Korea
+model_sk <- lm(Value ~ Year, data = cleaned_deaths_data_fit |> filter(country_name == "Korea, Rep."))
+# Predicting 2020 and 2021
+coefficients_sk <- coef(model_sk)
+sk_2020 <- (coefficients_sk["Year"] * 2020) + coefficients_sk["(Intercept)"]
+sk_2021 <- (coefficients_sk["Year"] * 2021) + coefficients_sk["(Intercept)"]
+# Ratio
+sk <- cleaned_deaths_data_long |>
+  filter(country_name == "Korea, Rep.")
+excess_sk_2020 <- sk$Value[11] - sk_2020
+excess_sk_2021 <- sk$Value[12] - sk_2021
+
+excess_deaths <- tibble(
+  Year = c(2020, 2020, 2020, 2020, 2021, 2021, 2021, 2021),
+  country_name = rep(c("India", "Russian Federation", "United States", "Korea, Rep."), times = 2),
+  Value = c(excess_ind_2020, excess_rus_2020, excess_us_2020, excess_sk_2020, excess_ind_2021, excess_rus_2021, excess_us_2021, excess_sk_2021) |> round(2)
+)
+
+ggplot(excess_deaths, aes(x = country_name, y = Value, fill = as.factor(Year))) +
+  geom_bar(stat = "identity", position = position_dodge(), width = 0.7) +
+  coord_flip() +  # Flip coordinates to make the bar plot horizontal
+  theme_minimal() +
+  labs(title = "Value by Country and Year", x = "Country", y = "Value") +
+  scale_fill_manual(values = c("2021" = "cyan4", "2020" = "cadetblue2"), name = "Year") +
+  geom_text(aes(label = Value), position = position_dodge(width = 0.8), color = "black")
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+combined_data <- read_csv("../data/analysis_data/cleaned_excess_death_ghs.csv")
+
+ggplot(combined_data, aes(x = ghs_index, y = excess_death_rate, label = country)) +
+  geom_point(aes(color = ifelse(country %in% c("USA", "Russia"), "Highlight", "Normal"))) +
+  scale_color_manual(values = c("Highlight" = "red", "Normal" = "black")) +
+  guides(color = FALSE) +
+  geom_text(vjust = 1.2, hjust = 0.5) +
+  geom_smooth(method = "lm", se = FALSE, color = "#669900") +
+  labs(title = "Scatterplot of Excess Death Rate vs GHS Index",
+       x = "Global Health Security Index",
+       y = "Excess Death Rate") +
+  theme_minimal()
+```
 
 # Data {#sec-data}
 
