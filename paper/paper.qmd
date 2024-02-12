@@ -30,7 +30,7 @@ library(knitr)
 ```
 
 
-# Introduction
+# Introduction {#sec-introduction}
 
 The COVID-19 pandemic has led to an enormous loss of life over the world and has presented an unprecedented challenge to public health, foreign policy and has additionally had an adverse effect on countries' economies around the world, over the past 5 years [@citeWHOeffect]. There have been over 774 million reported confirmed cases of the virus being contract and the outbreak has caused over 7 million deaths, which are claimed to be "under counted" and "under reported", suggesting that the actual number is even higher around 18.2 - 33.5 million based on the excess mortality estimates [@citeWikiCOVID]. This excessively high number of deaths has alerted the world to assess how countries assumed to be well-prepared to tackle such outbreaks were affected to this extent.
 
@@ -90,7 +90,7 @@ Second, we have a raw dataset on all cause death rates for all countries from 19
 #| tbl-cap-location: bottom
 #| warning: false
 
-cleaned_deaths_data <- read_csv("../data/analysis_data/cleaned_all_cause_dth_rates.csv")
+cleaned_deaths_data <- read_csv("../data/analysis_data/cleaned_all_cause_dth_rates.csv", show_col_types = FALSE)
 
 cleaned_deaths_data$country_name[cleaned_deaths_data$country_name == "Russian Federation"] <- "Russia"
 cleaned_deaths_data$country_name[cleaned_deaths_data$country_name == "Korea, Rep."] <- "South Korea"
@@ -113,7 +113,7 @@ The final raw dataset, as mentioned in @sec-data-raw, that we have is the IHME d
 #| tbl-cap-location: bottom
 #| warning: false
 
-combined_data <- read_csv("../data/analysis_data/cleaned_excess_death_ghs.csv")
+combined_data <- read_csv("../data/analysis_data/cleaned_excess_death_ghs.csv", show_col_types = FALSE)
 
 table_combined_data <- combined_data |>
   rename(
@@ -133,13 +133,21 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean tempus libero si
 
 # Results {#sec-results}
 
+This section will be divided into three parts where all together we aim to look at Russia's capabilty according to the GHS index to tackle pandemics (@sec-results-ghs), then compare Russia's trend in all cause death rates and excess death rates with those of other countries like India, South Korea and the United states (@sec-results-death-rates) and finally study the relationship between the excess death rate and GHS index for Russia along with a subset of countries in the world (@sec-results-death-rates).
 
+## Global Distribution of Global Health Security Index (GHS) in 2021 {#sec-results-ghs}
+
+As explained in @sec-data-raw, the GHS index is an indicator of how well prepared a country is to tackle epidemics or pandemics like the COVID-19 outbreak. The GHS index gives one an idea of how the sound health care system  as well as the rules and regulations of a certain country are in the context of facing pandemics. Generally, the higher the GHS index of a country, the more well-prepared and secure they are. @fig-map shows a representation of the world map with countries shaded on the basis of their GHS indices. This map is a replication of figure 1 in Nuzzo and Ledesma paper [@citeRepPaper] that is being replicated in this report.
 
 ```{r}
+#| label: fig-map
+#| fig-cap: Global Distribution of Global Health Security (GHS) Index Scores in 2021
 #| echo: false
 #| warning: false
 #| message: false
-cleaned_ghs_index_data_2021 <- read_csv("../data/analysis_data/cleaned_GHS_index.csv")
+#| fig-height: 6
+#| fig-width: 8
+cleaned_ghs_index_data_2021 <- read_csv("../data/analysis_data/cleaned_GHS_index.csv", show_col_types = FALSE)
 
 world <- ne_countries(scale = "medium", returnclass = "sf")
 
@@ -154,15 +162,32 @@ world_scores$score_factor <- cut(
 ggplot(data = world_scores) +
   geom_sf(aes(fill = score_factor), color = "white") +
   scale_fill_manual(values = c("#990000", "#CC3333", "#FF6666", "#FF9966", "#FFCC99", "#99CCFF", "#6699CC", "#336699", "#003399")) +
-  labs(fill = "Global health security score", title = "Global Health Security Score (2021)") +
+  labs(fill = "GHS Indices") +
   theme_minimal()
 ```
 
+We can observe here that there are countries like the United States and Australia whose GHS indices are one of the highest, implying that they were deemed extremely well prepared for epidemics. Then we see countries like Russia and China who were, although moderately when compared to the aforementioned countries, but still well prepared to tackle pandemics. Finally, we see countries such as Venezuela and Yemen which were said to be the least secure of all. 
+
+@fig-map provides this report with a background on how secure Russia was in tackling epidemics and pandemics, which as seen in the map, it was in a good position to face such outbreaks where numerous countries were deemed less prepared than Russia. This will aid us in drawing meaningful analyses throughout the paper, specifically in @sec-results-death-rates, sec-results-death-rates and @sec-discussion.
+
+## Trend in Death Rates for Russia, India, South Korea and United States {#sec-results-death-rates}
+
+Now we move on to analyzing the trends in the all cause death rates per 1000 population over 2010-2021, which includes COVID deaths as well as general deaths which were not caused by the outbreak, and the trend in the excess death rates per 100 population in 2020 and 2021. The excess death rates in this section were calculated by finding a difference between the expected death rate and the actual death rate for that year.
+
+@fig-all-cause-death-rate shows us the trend for the all cause death rates per 1000 population over 2010-2021 for India, South Korea, Russia and the United States using the data presented in @tbl-cleaned-death-rates. We observe here that from the years 2010-2019, there is a general gradually decreasing trend in the death rates in the case of Russia and India, and a gradually increasing trend in the death rates in the case of South Korea and the United States. The dashed line represents the line of best fit for the trend from 2010-2019. 
+
 ```{r}
+#| label: fig-all-cause-death-rate
+#| fig-cap: All Cause Death Rates per 1000 Population for India, South Korea, Russia and United States (2010-2021)
 #| echo: false
 #| warning: false
 #| message: false
-cleaned_deaths_data <- read_csv("../data/analysis_data/cleaned_all_cause_dth_rates.csv")
+#| fig-height: 4
+#| fig-width: 8
+cleaned_deaths_data <- read_csv("../data/analysis_data/cleaned_all_cause_dth_rates.csv", show_col_types = FALSE)
+
+cleaned_deaths_data$country_name[cleaned_deaths_data$country_name == "Russian Federation"] <- "Russia"
+cleaned_deaths_data$country_name[cleaned_deaths_data$country_name == "Korea, Rep."] <- "South Korea"
 
 cleaned_deaths_data_long <- pivot_longer(cleaned_deaths_data, cols = -country_name, names_to = "Year", values_to = "Value")
 
@@ -178,14 +203,23 @@ ggplot(cleaned_deaths_data_long, aes(x = Year, y = Value, group = country_name, 
   geom_smooth(data = cleaned_deaths_data_long, method = "lm", se = FALSE, aes(color = country_name), linetype = "dotted", size = 1) +
   theme_minimal() +
   scale_x_continuous(breaks = 2010:2021) +
-  labs(title = "Values Over Years by Country", x = "Year", y = "Value") +
+  labs(title = "All Cause Death Rates by Country (2010-2021)", x = "Year", y = "All Cause Death Rates") +
   theme(legend.title = element_blank())
 ```
 
+We see here in @fig-all-cause-death-rate that there is a sudden increase in the death rate in 2020 and 2021, and the increase in Russia's death rate is much higher than that of the other countries. The essential point to note here is that in the case of India, which has a GHS index lower than that of Russia, the rising trend observed in 2020 and 2021 was still not as excessive as in the case of Russia. The dotted line represents the line of best fit for the trend from 2010-2021. As we go from comparing Russia to South Korea, we see that in the case of South Korea, both the dashed (2010-2019) and the dotted (2010-2021) are very close together implying that the country did not experience an unanticipated number of deaths during COVID. However, in the case of Russia, we see the two lines diverging implying that there were unforeseen deaths during that period. 
+
+This observation leads us to @fig-excess-death-rate, where we present the excess death rate for the four countries for 2020 and 2021. As mentioned above, the excess death rates were calculated by extrapolating the dashed line of best-fit from years 2010-2019 in @fig-all-cause-death-rate representing the trend in all cause death rates to 2020 and 2021. This way we were able to find the expected death rate for each of the four countries and subsequently we were able to plot the difference between the expected death rate and the actual death rate called the excess death rate for 2020 and 2021 for all four countries in @fig-excess-death-rate.
+
 ```{r}
+#| label: fig-excess-death-rate
+#| fig-cap: Excess Death Rates per 1000 Population for India, South Korea, Russia and United States, 2020 and 2021
 #| echo: false
 #| warning: false
 #| message: false
+#| fig-height: 4
+#| fig-width: 8
+
 
 # Model: India
 model_india <- lm(Value ~ Year, data = cleaned_deaths_data_fit |> filter(country_name == "India"))
@@ -199,15 +233,15 @@ ind <- cleaned_deaths_data_long |>
 excess_ind_2020 <- ind$Value[11] - ind_2020
 excess_ind_2021 <- ind$Value[12] - ind_2021
 
-# Model: Russian Federation
-model_rus <- lm(Value ~ Year, data = cleaned_deaths_data_fit |> filter(country_name == "Russian Federation"))
+# Model: Russia
+model_rus <- lm(Value ~ Year, data = cleaned_deaths_data_fit |> filter(country_name == "Russia"))
 # Predicting 2020 and 2021
 coefficients_rus <- coef(model_rus)
 rus_2020 <- (coefficients_rus["Year"] * 2020) + coefficients_rus["(Intercept)"]
 rus_2021 <- (coefficients_rus["Year"] * 2021) + coefficients_rus["(Intercept)"]
 # Ratio
 rus <- cleaned_deaths_data_long |>
-  filter(country_name == "Russian Federation")
+  filter(country_name == "Russia")
 excess_rus_2020 <- rus$Value[11] - rus_2020
 excess_rus_2021 <- rus$Value[12] - rus_2021
 
@@ -224,20 +258,20 @@ excess_us_2020 <- us$Value[11] - us_2020
 excess_us_2021 <- us$Value[12] - us_2021
 
 # Model: South Korea
-model_sk <- lm(Value ~ Year, data = cleaned_deaths_data_fit |> filter(country_name == "Korea, Rep."))
+model_sk <- lm(Value ~ Year, data = cleaned_deaths_data_fit |> filter(country_name == "South Korea"))
 # Predicting 2020 and 2021
 coefficients_sk <- coef(model_sk)
 sk_2020 <- (coefficients_sk["Year"] * 2020) + coefficients_sk["(Intercept)"]
 sk_2021 <- (coefficients_sk["Year"] * 2021) + coefficients_sk["(Intercept)"]
 # Ratio
 sk <- cleaned_deaths_data_long |>
-  filter(country_name == "Korea, Rep.")
+  filter(country_name == "South Korea")
 excess_sk_2020 <- sk$Value[11] - sk_2020
 excess_sk_2021 <- sk$Value[12] - sk_2021
 
 excess_deaths <- tibble(
   Year = c(2020, 2020, 2020, 2020, 2021, 2021, 2021, 2021),
-  country_name = rep(c("India", "Russian Federation", "United States", "Korea, Rep."), times = 2),
+  country_name = rep(c("India", "Russia", "United States", "South Korea"), times = 2),
   Value = c(excess_ind_2020, excess_rus_2020, excess_us_2020, excess_sk_2020, excess_ind_2021, excess_rus_2021, excess_us_2021, excess_sk_2021) |> round(2)
 )
 
@@ -245,28 +279,43 @@ ggplot(excess_deaths, aes(x = country_name, y = Value, fill = as.factor(Year))) 
   geom_bar(stat = "identity", position = position_dodge(), width = 0.7) +
   coord_flip() +  # Flip coordinates to make the bar plot horizontal
   theme_minimal() +
-  labs(title = "Value by Country and Year", x = "Country", y = "Value") +
+  labs(title = "Excess Death Rate by Country and Year", x = "Country", y = "Excess Death Rate") +
   scale_fill_manual(values = c("2021" = "cyan4", "2020" = "cadetblue2"), name = "Year") +
-  geom_text(aes(label = Value), position = position_dodge(width = 0.8), color = "black")
+  geom_text(aes(label = Value), position = position_dodge(width = 0.8), hjust = -0.01, color = "black")
 ```
 
+We see in @fig-excess-death-rate the massive difference between the excess death rates for Russia and the other countries. Comparing Russia to South Korea we see that, as seen in @fig-all-cause-death-rate, South Korea was very faintly affected by the COVID-19 pandemic, however Russia saw a sudden rise in deaths from 2019 to 2021. This shows us that the observations here are analogous to the plot in @fig-all-cause-death-rate. When we compare Russia with India, which as aforementioned was deemed a less secure country in the case of epidemics, we see that the excess death rates for Russia in both 2020 and 2021 are much higher than those for India. This observation will further aid us in making meaningful discussions in @sec-discussion.
+
+## Relationship between the Excess Death Rate and Global Health Security Index (GHS) {#sec-results-death-rates}
+
+Finally, we will now explore the relationship between the excess death rate seen above and the GHS index for a subset of countries per 100,000 population. @fig-excess-death-rate-ghs shows us a subset of countries scattered around the plot according to their excess death rate and the GHS index shown in the Appendix @tbl-appendix. The green line shows the general decreasing trend which implies that as the GHS index increases, the excess death rate tends to decrease, i.e. the excess death rate for more "secure" or well-prepared countries is generally lower. 
+
+Russia, labelled in red, is seen to be significantly higher than the line of best fit, which implies that Russia's excess death rate was much worse than it should have been. We observe that countries like Brazil and Indonesia, which have approximately the same GHS index as Russia, are nearer to the line of best fit than Russia. India, although having a lower GHS index than Russia is seen to have a much lower than general excess death rate.
+
 ```{r}
+#| label: fig-excess-death-rate-ghs
+#| fig-cap: Relationship between the Excess Death Rate and the Global Health Security Index (GHS) per 100,000 Population for a subset of countries, 2020-2021
 #| echo: false
 #| warning: false
 #| message: false
-combined_data <- read_csv("../data/analysis_data/cleaned_excess_death_ghs.csv")
+#| fig-height: 5
+#| fig-width: 8
+
+combined_data <- read_csv("../data/analysis_data/cleaned_excess_death_ghs.csv", show_col_types = FALSE)
 
 ggplot(combined_data, aes(x = ghs_index, y = excess_death_rate, label = country)) +
-  geom_point(aes(color = ifelse(country %in% c("USA", "Russia"), "Highlight", "Normal"))) +
+  geom_point(aes(color = ifelse(country %in% c("Russia"), "Highlight", "Normal"))) +
   scale_color_manual(values = c("Highlight" = "red", "Normal" = "black")) +
   guides(color = FALSE) +
-  geom_text(vjust = 1.2, hjust = 0.5) +
+  geom_text(vjust = 1.5, hjust = 0.5) +
   geom_smooth(method = "lm", se = FALSE, color = "#669900") +
-  labs(title = "Scatterplot of Excess Death Rate vs GHS Index",
-       x = "Global Health Security Index",
+  labs(title = "Excess Death Rate vs GHS Index for a subset of countries",
+       x = "Global Health Security Index (GHS)",
        y = "Excess Death Rate") +
   theme_minimal()
 ```
+
+The implications from this figure will be further studied in @sec-discussion.
 
 # Discussion {#sec-discussion}
 
@@ -278,7 +327,7 @@ If my paper were 10 pages, then should be be at least 2.5 pages. The discussion 
 
 ## Third discussion point
 
-## Weaknesses and next steps
+## Weaknesses and Further Scope {#sec-disc-weaknesses}
 
 Weaknesses and next steps should also be included.
 
@@ -288,12 +337,27 @@ Weaknesses and next steps should also be included.
 
 # Appendix {-}
 
-
 # Additional data details
 
-# Model details {#sec-model-details}
+```{r}
+#| echo: false
+#| eval: true
+#| label: tbl-appendix
+#| tbl-cap: "Cleaned Data showing Excess Death Rate and GHS index for a subset of countries"
+#| tbl-cap-location: bottom
+#| warning: false
 
-## Posterior predictive check
+combined_data <- read_csv("../data/analysis_data/cleaned_excess_death_ghs.csv", show_col_types = FALSE)
+
+table_combined_data <- combined_data |>
+  rename(
+    `Country Name` = country,
+    `Excess Death Rate` = excess_death_rate,
+    `GHS Index` = ghs_index
+  )
+
+kable(table_combined_data)
+```
 
 <!-- In @fig-ppcheckandposteriorvsprior-1 we implement a posterior predictive check. This shows... -->
 
