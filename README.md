@@ -19,6 +19,8 @@ All the raw data used for replication in this paper was from the replication pac
 -   `data/raw_data` contains the raw data from the replication package of the replicated paper.
 -   `scripts/99-replications.R` contains the R code to replicate 3 figures in the paper.
 
+Replication on Social Science Reproduction platform available at: https://www.socialsciencereproduction.org/reproductions/8938b287-6681-4a5e-8993-42011a51be58/index
+
 ## File Structure
 
 The repo has been structured in a way to make it accessible to the user. The repo is structured as:
