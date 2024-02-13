@@ -4,7 +4,7 @@ author:
   - Aryaman Sharma
   - Aviral Bhardwaj
   - Janel Gilani
-thanks: "Code and data are available at: https://github.com/Ary4m3n/covid-effect-russia.git; Replication on Social Science Reproduction platform available at: "
+thanks: "Code and data are available at: https://github.com/Ary4m3n/covid-effect-russia.git; Replication on Social Science Reproduction platform available at: https://www.socialsciencereproduction.org/reproductions/8938b287-6681-4a5e-8993-42011a51be58/index"
 date: today
 date-format: long
 abstract: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean tempus libero sit amet nisl dapibus, varius dictum magna pellentesque. In lacinia nec ligula eget condimentum. Aenean imperdiet enim sit amet felis volutpat, eu ornare ante pretium. Donec ullamcorper tempus facilisis. Mauris porttitor libero ultrices tortor facilisis, quis varius sapien ultricies. Pellentesque et metus vel quam mollis dignissim ultricies a dui. Cras sodales porttitor pulvinar. Proin vel nunc sit amet sapien venenatis pellentesque nec at felis."
