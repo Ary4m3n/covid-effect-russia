@@ -1,11 +1,11 @@
 #### Preamble ####
-# Purpose: Replicated graphs from... [...UPDATE THIS...]
+# Purpose: Replicated graphs from Nuzzo and Ledesma's paper provided in "other/literature"
 # Author: Aryaman Sharma
 # Date: 10 February 2024
 # Contact: aryaman.sharma@mail.utoronto.ca
 # License: MIT
-# Pre-requisites: [...UPDATE THIS...]
-# Any other information needed? [...UPDATE THIS...]
+# Pre-requisites: Run 02-data_cleaning.R before running this script.
+# Any other information needed?: This script will produce 5 graphs in total, which is Figure 1, Figure 2a, Figure 2b, Figure 3a and Figure 3b of Nuzzo and Ledesma's paper
 
 
 #### Workspace setup ####

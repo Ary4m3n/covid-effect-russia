@@ -131,7 +131,7 @@ Now that we have cleaned our raw datasets and have generated clean tables for an
 
 ## Measurement {#sec-data-measurement}
 
-With respect to measurement and accounting for the GHS index, it encompasses various measurements grouped into six broad categories: (1) prevention, (2) detection and reporting, (3) rapid response, (4) health system, (5) compliance with international norms, and (6) risk environment. These values are calculated based on the data available for each country which are self-reported and are then used to calculate the overall GHS index [@GHSIndexMethodology].`
+With respect to measurement and accounting for the GHS index, it encompasses various measurements grouped into six broad categories: (1) prevention, (2) detection and reporting, (3) rapid response, (4) health system, (5) compliance with international norms, and (6) risk environment. These values are calculated based on the data available for each country which are self-reported and are then used to calculate the overall GHS index [@GHSIndexMethodology].
 
 In addition to tracking deaths, a crucial data point during the COVID-19 pandemic is the excess death rate, representing the number of deaths occurring within a specific period above the expected baseline. This metric serves as a key indicator of the pandemic's impact on mortality. In our dataset, death rates are standardized to a per 100,000 population basis, facilitating meaningful comparisons across countries.
 
