@@ -1,6 +1,6 @@
 #### Preamble ####
 # Purpose: Tests for the cleaned dataset to check if the requirements match that of the simulated data.
-# Author: Aryaman Sharma
+# Author: Aryaman Sharma, Aviral Bhardwaj, Janel Gilani
 # Date: 13 February 2024
 # Contact: aryaman.sharma@mail.utoronto.ca
 # License: MIT
