@@ -1,6 +1,6 @@
 #### Preamble ####
 # Purpose: Simulates the data tables shown in the other/sketches/datasets.pdf. There are 3 tables simulated here as mentioned below.
-# Author: Aryaman Sharma
+# Author: Aryaman Sharma, Aviral Bhardwaj, Janel Gilani
 # Date: 13 February 2024
 # Contact: aryaman.sharma@mail.utoronto.ca
 # License: MIT

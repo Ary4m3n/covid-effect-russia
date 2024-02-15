@@ -1,6 +1,6 @@
 #### Preamble ####
 # Purpose: Cleans the raw data obtained from Nuzzo and Ledesma's paper and saves it to the directory "data/analysis_data"
-# Author: Aryaman Sharma
+# Author: Aryaman Sharma, Aviral Bhardwaj, Janel Gilani
 # Date: 10 February 2024
 # Contact: aryaman.sharma@mail.utoronto.ca
 # License: MIT

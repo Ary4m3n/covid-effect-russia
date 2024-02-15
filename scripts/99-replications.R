@@ -1,6 +1,6 @@
 #### Preamble ####
 # Purpose: Replicated graphs from Nuzzo and Ledesma's paper provided in "other/literature"
-# Author: Aryaman Sharma
+# Author: Aryaman Sharma, Aviral Bhardwaj, Janel Gilani
 # Date: 10 February 2024
 # Contact: aryaman.sharma@mail.utoronto.ca
 # License: MIT
