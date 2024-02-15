@@ -407,7 +407,6 @@ In conclusion, the analysis underscores Russia's shortcomings in controlling the
 #| eval: true
 #| label: tbl-appendix
 #| tbl-cap: "Cleaned Data showing Excess Death Rate and GHS index for a subset of countries"
-#| tbl-cap-location: bottom
 #| warning: false
 
 combined_data <- read_csv("../data/analysis_data/cleaned_excess_death_ghs.csv", show_col_types = FALSE)
