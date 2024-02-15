@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repo provides all the work and files used and created while writing the paper titled *"Why Did Russia Fare So Poorly during COVID: An Analysis of Why One of the Best Prepared Countries Could Not Control Excess Deaths"*. To access the PDF of the paper you can find it in the `paper` directory where it is named as `paper.pdf`. The File Structure Section outlines each directory and also all relevant material that they contain. Please go through the File Structure Section before accessing the repo to gain all the understanding needed.
+This repo provides all the work and files used and created while writing the paper titled *"Evaluating Russia's Response to the COVID-19 Pandemic: An Analysis of High Excess Death Rates Despite High GHS Index"*. To access the PDF of the paper you can find it in the `paper` directory where it is named as `paper.pdf`. The File Structure Section outlines each directory and also all relevant material that they contain. Please go through the File Structure Section before accessing the repo to gain all the understanding needed.
 
 To use this folder, click the green "Code" button", then "Download ZIP". The user can then move the folder around to wherever they want to work on it on their own computer.
 
